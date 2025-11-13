@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         NGA 自动 BGM（自动播放与随滚动切换）
 // @namespace    http://userscripts.example/nga_bgm
-// @version      0.1.2
+// @version      0.1.3
 // @description  在 bbs.nga.cn 帖子中对作者插入的 <video> 块实现自动播放和随滚动切换（前区间不播放）。
 // @author       sudoer
 // @homepageURL  https://github.com/sudaoer/nga_auto_bgm
 // @downloadURL  https://raw.githubusercontent.com/sudaoer/nga_auto_bgm/master/nga_auto_bgm.user.js
 // @updateURL    https://raw.githubusercontent.com/sudaoer/nga_auto_bgm/master/nga_auto_bgm.user.js
 // @match        https://bbs.nga.cn/*
+// @match        https://ngabbs.com/*
+// @match        https://nga.178.cn/*
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_registerMenuCommand
