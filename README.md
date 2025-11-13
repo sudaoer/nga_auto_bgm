@@ -1,5 +1,11 @@
 # 特别感谢OpenAI，是GPT-5全权编写了代码和本README
 
+# 安科推荐
+
+- [[安科/安价] [同人] [MYGO][HBR/炽焰天穹]丰川祥子、为了人类的未来而战……真的能战吗？](https://bbs.nga.cn/read.php?tid=41989465)
+
+- 什么，hpgo和诡秘go都没有bgm诶，那不贴链接了
+
 # NGA 自动 BGM（自动播放与随滚动切换）
 
 在 NGA 论坛（`bbs.nga.cn`）的帖子中，对作者插入的 BGM 进行： 
