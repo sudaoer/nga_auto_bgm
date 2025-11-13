@@ -4,6 +4,9 @@
 // @version      0.1.2
 // @description  在 bbs.nga.cn 帖子中对作者插入的 <video> 块实现自动播放和随滚动切换（前区间不播放）。
 // @author       sudoer
+// @homepageURL  https://github.com/sudaoer/nga_auto_bgm
+// @downloadURL  https://raw.githubusercontent.com/sudaoer/nga_auto_bgm/master/nga_auto_bgm.user.js
+// @updateURL    https://raw.githubusercontent.com/sudaoer/nga_auto_bgm/master/nga_auto_bgm.user.js
 // @match        https://bbs.nga.cn/*
 // @grant        GM_getValue
 // @grant        GM_setValue
