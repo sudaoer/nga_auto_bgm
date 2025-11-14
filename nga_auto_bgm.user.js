@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NGA 自动 BGM（自动播放与随滚动切换）
 // @namespace    http://userscripts.example/nga_bgm
-// @version      0.1.4
+// @version      0.1.5
 // @description  在 bbs.nga.cn 帖子中对作者插入的 <video> 块实现自动播放和随滚动切换（前区间不播放）。
 // @author       sudoer
 // @homepageURL  https://github.com/sudaoer/nga_auto_bgm
@@ -94,7 +94,7 @@
 		panel.querySelector('#nga-volume').value = state.volume;
 		const status = panel.querySelector('#nga-status');
 		const idx = state.currentIndex;
-		status.textContent = `自动:${state.enabled ? '开' : '关'} | 静音:${state.muted ? '是' : '否'} | 当前:${idx >= 0 ? (idx + 1) : 0 + '/' + state.videos.length}`;
+		status.textContent = `自动:${state.enabled ? '开' : '关'} | 静音:${state.muted ? '是' : '否'} | 当前:${(idx >= 0 ? (idx + 1) : 0) + '/' + state.videos.length}`;
 	}
 
 	function saveState() {
