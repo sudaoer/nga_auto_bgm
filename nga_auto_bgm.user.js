@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NGA 自动 BGM（自动播放与随滚动切换）
 // @namespace    http://userscripts.example/nga_bgm
-// @version      0.1.3
+// @version      0.1.4
 // @description  在 bbs.nga.cn 帖子中对作者插入的 <video> 块实现自动播放和随滚动切换（前区间不播放）。
 // @author       sudoer
 // @homepageURL  https://github.com/sudaoer/nga_auto_bgm
@@ -94,7 +94,7 @@
 		panel.querySelector('#nga-volume').value = state.volume;
 		const status = panel.querySelector('#nga-status');
 		const idx = state.currentIndex;
-		status.textContent = `自动:${state.enabled ? '开' : '关'} | 静音:${state.muted ? '是' : '否'} | 当前:${idx>=0? (idx+1) + '/' + state.videos.length : '无'}`;
+		status.textContent = `自动:${state.enabled ? '开' : '关'} | 静音:${state.muted ? '是' : '否'} | 当前:${idx >= 0 ? (idx + 1) : 0 + '/' + state.videos.length}`;
 	}
 
 	function saveState() {
@@ -106,23 +106,23 @@
 	function toggleEnabled() { state.enabled = !state.enabled; saveState(); updatePanel(); syncActiveByScroll(); }
 	function toggleMuted() {
 		state.muted = !state.muted; saveState();
-		state.videos.forEach(v => { try { v.muted = state.muted; } catch (e) {} });
+		state.videos.forEach(v => { try { v.muted = state.muted; } catch (e) { } });
 		updatePanel();
 	}
-	function setVolume(v) { state.volume = Math.max(0, Math.min(1, v)); saveState(); state.videos.forEach(vd => { try { vd.volume = state.volume; } catch (e) {} }); updatePanel(); }
+	function setVolume(v) { state.volume = Math.max(0, Math.min(1, v)); saveState(); state.videos.forEach(vd => { try { vd.volume = state.volume; } catch (e) { } }); updatePanel(); }
 
 	// 若视频是首次播放，确保从头开始
 	function ensureStartFromBeginning(v) {
 		try {
 			if (!state.played || state.played.has(v)) return;
-			const set0 = () => { try { v.currentTime = 0; } catch(e){} };
+			const set0 = () => { try { v.currentTime = 0; } catch (e) { } };
 			if (v.readyState >= 1) { // HAVE_METADATA
 				set0();
 			} else {
 				v.addEventListener('loadedmetadata', set0, { once: true });
 			}
 			state.played.add(v);
-		} catch(e) { /* noop */ }
+		} catch (e) { /* noop */ }
 	}
 
 	function playIndex(i) {
@@ -139,7 +139,7 @@
 					const p = v.play();
 					if (p && p.catch) p.catch(() => {
 						// 如果播放被阻止，尝试静音后再播放
-						try { v.muted = true; v.play().catch(()=>{}); } catch (e) {}
+						try { v.muted = true; v.play().catch(() => { }); } catch (e) { }
 					});
 				} else {
 					v.pause();
@@ -151,11 +151,11 @@
 
 	function playPrev() { if (state.videos.length === 0) return; const i = state.currentIndex > 0 ? state.currentIndex - 1 : state.videos.length - 1; playIndex(i); }
 	function playNext() { if (state.videos.length === 0) return; const i = (state.currentIndex + 1) % state.videos.length; playIndex(i); }
-	function playPauseToggle() { const v = state.videos[state.currentIndex]; if (!v) return; if (v.paused) v.play().catch(()=>{}); else v.pause(); }
+	function playPauseToggle() { const v = state.videos[state.currentIndex]; if (!v) return; if (v.paused) v.play().catch(() => { }); else v.pause(); }
 
 	function stopAll() {
 		state.currentIndex = -1;
-		state.videos.forEach(v => { try { v.pause(); } catch(e){} });
+		state.videos.forEach(v => { try { v.pause(); } catch (e) { } });
 		updatePanel();
 	}
 
@@ -176,7 +176,7 @@
 				// 提示高亮
 				const oldOutline = el.style.outline;
 				el.style.outline = '2px solid #4caf50';
-				setTimeout(() => { try { el.style.outline = oldOutline || 'none'; } catch(e){} }, 1200);
+				setTimeout(() => { try { el.style.outline = oldOutline || 'none'; } catch (e) { } }, 1200);
 			}
 		} catch (e) {
 			console.warn('nga-auto-bgm locate error', e);
@@ -200,7 +200,7 @@
 		// 绑定一些事件，便于手动播放时保持 panel 状态
 		state.videos.forEach(v => {
 			v.style.outline = v.style.outline || 'none';
-			v.addEventListener('play', () => { try { state.played.add(v); } catch(e){} updatePanel(); });
+			v.addEventListener('play', () => { try { state.played.add(v); } catch (e) { } updatePanel(); });
 		});
 		computePositions();
 		updatePanel();
@@ -208,7 +208,7 @@
 
 	function computePositions() {
 		const positions = state.videos.map(v => ({ el: v, top: v.getBoundingClientRect().top + window.scrollY }));
-		positions.sort((a,b) => a.top - b.top);
+		positions.sort((a, b) => a.top - b.top);
 		state.positions = positions;
 		// 如果当前 index 超出范围，重置
 		if (state.currentIndex >= state.videos.length) state.currentIndex = -1;
@@ -224,7 +224,7 @@
 		let idx = -1;
 		for (let i = 0; i < state.positions.length; i++) {
 			const top = state.positions[i].top;
-			const nextTop = (i + 1 < state.positions.length) ? state.positions[i+1].top : Infinity;
+			const nextTop = (i + 1 < state.positions.length) ? state.positions[i + 1].top : Infinity;
 			// 区间定义：从 video.top 到 下一个 video.top 之间播放该 video
 			if (center >= top && center < nextTop) { idx = i; break; }
 		}
@@ -272,7 +272,7 @@
 		try {
 			typeof GM_registerMenuCommand === 'function' && GM_registerMenuCommand('切换自动切换', toggleEnabled);
 			typeof GM_registerMenuCommand === 'function' && GM_registerMenuCommand('切换静音', toggleMuted);
-		} catch (e) {}
+		} catch (e) { }
 
 		// 初次 sync
 		setTimeout(() => { computePositions(); syncActiveByScroll(); }, 500);
